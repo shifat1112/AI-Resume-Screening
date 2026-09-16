@@ -254,6 +254,7 @@ AI-Resume-Screening/
 │
 └── data/
     └── README.md
+    └── synthetic_resumes.csv
 ```
 
 The original resume dataset is intentionally excluded from this public
