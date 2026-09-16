@@ -10,4 +10,8 @@ numpy
 scikit-learn
 matplotlib
 seaborn
-Faker for synthetic resume generation
+Faker 
+sentence-transformers
+requests
+ollama
+Mistral 7-B
