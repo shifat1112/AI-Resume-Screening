@@ -1,0 +1,13 @@
+spacy
+pdfplumber
+python-docx
+pytesseract
+Pillow
+PyMuPDF
+python-dateutil
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+Faker for synthetic resume generation
