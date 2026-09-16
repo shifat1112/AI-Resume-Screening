@@ -83,6 +83,8 @@ Resume Documents
 
 ---
 
+![System Workflow](images/image.png)
+
 ## 📄 Resume Processing
 
 The system supports resume documents in the following formats:
