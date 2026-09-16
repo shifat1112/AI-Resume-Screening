@@ -16,14 +16,14 @@ The framework processes resumes from multiple document formats and extracts
 information such as skills, education, experience, projects, achievements,
 CGPA, email, and phone information.
 
-It then applies different matching approaches, including:
+It applies multiple approaches to candidate evaluation, including:
 
 - Rule-based information extraction
-- Skill matching
+- Skill and feature-based matching
 - Experience and project analysis
 - TF-IDF-based matching
 - Semantic similarity using Sentence Transformers
-- LLM-based resume evaluation using Mistral 7B through Ollama
+- LLM-assisted resume evaluation using Mistral 7B through Ollama
 
 ---
 
@@ -35,7 +35,7 @@ It then applies different matching approaches, including:
 - Calculate candidate-job matching scores.
 - Compare lexical and semantic matching approaches.
 - Explore LLM-assisted candidate evaluation.
-- Produce an interpretable candidate ranking framework.
+- Develop an interpretable candidate ranking framework.
 
 ---
 
@@ -45,161 +45,330 @@ It then applies different matching approaches, including:
 Resume Documents
        │
        ▼
-┌──────────────────────┐
-│ Resume Text          │
-│ Extraction           │
-└──────────┬───────────┘
-           │
-           ▼
-┌──────────────────────┐
-│ Information          │
-│ Extraction           │
-│                      │
-│ • Skills             │
-│ • Education          │
-│ • Experience         │
-│ • Projects           │
-│ • Achievements       │
-│ • CGPA               │
-└──────────┬───────────┘
-           │
-           ▼
-┌──────────────────────┐
-│ Candidate            │
-│ Feature Processing   │
-└──────────┬───────────┘
-           │
-     ┌─────┼──────────────┐
-     ▼     ▼              ▼
-   TF-IDF  Semantic       LLM
-           Similarity     Evaluation
-     │     │              │
-     └─────┼──────────────┘
-           ▼
-┌──────────────────────┐
-│ Candidate Matching    │
-│ & Ranking             │
-└──────────────────────┘
+┌─────────────────────────┐
+│ Resume Text Extraction  │
+│ PDF • DOCX • TXT • OCR  │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│ Information Extraction  │
+│                         │
+│ • Skills                │
+│ • Education             │
+│ • Experience            │
+│ • Projects              │
+│ • Achievements          │
+│ • CGPA                  │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│ Candidate Feature       │
+│ Processing              │
+└────────────┬────────────┘
+             │
+       ┌─────┼──────────────┐
+       ▼     ▼              ▼
+    TF-IDF  Semantic       LLM
+            Similarity   Evaluation
+       │     │              │
+       └─────┼──────────────┘
+             ▼
+┌─────────────────────────┐
+│ Candidate Matching      │
+│ & Ranking               │
+└─────────────────────────┘
+```
 
-📄 Resume Processing
+---
 
-The system supports resume documents in several formats:
+## 📄 Resume Processing
 
-i. PDF
-ii. DOCX
-iii. TXT
-iv. JPG
-v. JPEG
-vi. PNG
+The system supports resume documents in the following formats:
+
+- PDF
+- DOCX
+- TXT
+- JPG
+- JPEG
+- PNG
 
 Text extraction is performed using format-specific processing tools, while
 OCR is used for image-based resumes.
 
-🔍 Information Extraction
+---
+
+## 🔍 Information Extraction
 
 The framework extracts structured candidate information including:
 
-Feature	Description
-Name	Candidate name
-Email	Email address
-Phone	Contact number
-Skills	Identified technical/professional skills
-CGPA	Academic CGPA/GPA when available
-Experience	Estimated years of experience
-Education	Educational information
-Projects	Project-related information
-Achievements	Candidate achievements
-Experience Details	Professional experience information
+| Feature | Description |
+|---|---|
+| Name | Candidate name |
+| Email | Email address |
+| Phone | Contact number |
+| Skills | Identified technical and professional skills |
+| CGPA | Academic CGPA/GPA when available |
+| Experience | Estimated years of experience |
+| Education | Educational information |
+| Projects | Project-related information |
+| Achievements | Candidate achievements |
+| Experience Details | Professional experience information |
 
 spaCy and regular-expression-based processing are used for several extraction
 tasks.
 
-🧠 Candidate Matching Approaches
-1. Skill & Feature-Based Matching
+---
+
+## 🧠 Candidate Matching Approaches
+
+### 1. Skill & Feature-Based Matching
 
 Candidate features are evaluated using:
 
-Skill matching
-Project count
-Achievement count
-Years of experience
+- Skill matching
+- Project count
+- Achievement count
+- Years of experience
 
-A weighted matching score is calculated from these features.
+The current implementation uses the following weighted scoring scheme:
 
-The current implementation uses:
+| Feature | Weight |
+|---|---:|
+| Skill Matching | 40% |
+| Project Score | 20% |
+| Achievement Score | 20% |
+| Experience Score | 20% |
 
-40% skill matching
-20% project score
-20% achievement score
-20% experience score
+The resulting score is used to support candidate comparison and ranking.
 
-2. Semantic Similarity
+---
+
+### 2. TF-IDF-Based Matching
+
+TF-IDF is used to represent textual information and measure lexical similarity
+between candidate information and job requirements.
+
+Cosine similarity is used to calculate the degree of textual relevance.
+
+---
+
+### 3. Semantic Similarity
 
 The project uses the Sentence Transformers model:
 
+```text
 all-MiniLM-L6-v2
+```
 
-to generate semantic embeddings for the job description and candidate resume
+The model generates semantic embeddings for job descriptions and candidate
 information.
 
 Cosine similarity is then used to measure semantic relevance between the
 candidate information and job description.
 
-3. LLM-Based Evaluation
+---
+
+### 4. LLM-Based Evaluation
 
 The project also explores LLM-assisted candidate evaluation using:
 
---Mistral 7B through Ollama
+```text
+Mistral 7B + Ollama
+```
 
 The LLM receives a job description and resume summary and produces:
 
---Match score
---Short reasoning for the score
+- A match score on a 0–100 scale
+- A short textual explanation for the score
 
-The notebook requests a score on a 0–100 scale together with a textual reason.
+This component is intended as an additional evaluation approach rather than
+a replacement for the structured matching methods.
 
-📊 Example Candidate Ranking
+---
 
-The feature-based matching stage produces candidate-level values such as:
+## 📊 Candidate Ranking
 
---Match Score
---Experience Years
---Skills
---Project Score
---Achievement Score
+The feature-based matching stage produces candidate-level information such as:
 
-The notebook demonstrates sorting candidates according to their calculated
-matching scores.
+- Match Score
+- Experience Years
+- Skills
+- Project Score
+- Achievement Score
 
-🛠️ Technologies
+Candidates can then be sorted according to their calculated matching scores.
 
-Programming:
---Python
---Google Colab
+---
 
-Natural Language Processing:
---spaCy
---Regular Expressions
---Sentence Transformers
+## 🛠️ Technologies
 
-Machine Learning:
---Scikit-learn
---TF-IDF
---Cosine Similarity
+### Programming & Environment
 
-LLM:
---Mistral 7B
---Ollama
+- Python
+- Google Colab
 
-Document Processing:
---PyMuPDF
---pdfplumber
---python-docx
---Tesseract OCR
---Pillow
+### Natural Language Processing
 
-Data & Visualization:
---Pandas
---NumPy
---Matplotlib
---Seaborn
+- spaCy
+- Regular Expressions
+- Sentence Transformers
+
+### Machine Learning
+
+- Scikit-learn
+- TF-IDF
+- Cosine Similarity
+
+### Large Language Models
+
+- Mistral 7B
+- Ollama
+
+### Document Processing
+
+- PyMuPDF
+- pdfplumber
+- python-docx
+- Tesseract OCR
+- Pillow
+
+### Data & Visualization
+
+- Pandas
+- NumPy
+- Matplotlib
+- Seaborn
+
+---
+
+## 📁 Project Structure
+
+```text
+AI-Resume-Screening/
+│
+├── AI_Resume_Screening.ipynb
+├── README.md
+├── requirements.txt
+│
+└── data/
+    └── README.md
+```
+
+The original resume dataset is intentionally excluded from this public
+repository because resume documents may contain personally identifiable
+information.
+
+---
+
+## 🚀 How to Run
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/shifat1112/AI-Resume-Screening.git
+cd AI-Resume-Screening
+```
+
+### 2. Install Python dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Install the spaCy English model
+
+```bash
+python -m spacy download en_core_web_sm
+```
+
+### 4. Prepare your own resume dataset
+
+Use appropriately sourced and anonymized resume documents for experimentation.
+
+Do not upload resumes containing personal or sensitive information to this
+public repository.
+
+### 5. Open the notebook
+
+Open:
+
+```text
+AI_Resume_Screening.ipynb
+```
+
+The notebook can be executed using Google Colab or a compatible Python/Jupyter
+environment.
+
+---
+
+## ⚠️ LLM Component
+
+The project includes an optional local LLM component using Mistral through
+Ollama.
+
+The LLM component requires Ollama to be installed and the required Mistral
+model to be available locally.
+
+This component is optional. The resume extraction and candidate-matching
+stages can be explored independently of the local LLM component.
+
+---
+
+## 🔬 Research Focus
+
+This project explores the application of Natural Language Processing (NLP),
+semantic representation, structured candidate features, and local Large
+Language Models (LLMs) for automated resume screening.
+
+The framework considers multiple candidate attributes, including skills,
+experience, education, projects, achievements, and other extracted resume
+information, rather than relying solely on keyword matching.
+
+---
+
+## ⚠️ Limitations
+
+The current implementation has several limitations:
+
+- Resume formats and layouts can vary considerably.
+- Rule-based extraction may not capture every resume structure.
+- Skill matching depends partly on the available skill vocabulary.
+- Semantic similarity does not necessarily represent recruiter judgment.
+- LLM-generated scores may vary depending on the model and prompt.
+- The current experiments do not establish that automated scores are
+  equivalent to human recruiter evaluations.
+- Bias and fairness require further investigation using appropriate datasets
+  and evaluation methods.
+
+---
+
+## 🔮 Future Work
+
+Potential extensions include:
+
+- Improved resume section detection
+- More robust skill normalization
+- Better semantic candidate-job matching
+- Explainable candidate scoring
+- Bias and fairness analysis
+- Larger and more diverse datasets
+- Evaluation against human recruiter judgments
+- Improved LLM-based reasoning
+- Web-based deployment
+- Candidate-job matching across multiple job categories
+
+---
+
+## 👨‍💻 Author
+
+**Md. Shifat Ahmed**
+
+B.Sc. in Computer Science & Engineering  
+Daffodil International University
+
+**Research Interests:** Artificial Intelligence • Machine Learning • NLP •
+Generative AI • Intelligent Systems
+
+GitHub: [@shifat1112](https://github.com/shifat1112)
