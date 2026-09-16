@@ -85,12 +85,12 @@ Resume Documents
 
 The system supports resume documents in several formats:
 
-PDF
-DOCX
-TXT
-JPG
-JPEG
-PNG
+i. PDF
+ii. DOCX
+iii. TXT
+iv. JPG
+v. JPEG
+vi. PNG
 
 Text extraction is performed using format-specific processing tools, while
 OCR is used for image-based resumes.
@@ -132,6 +132,7 @@ The current implementation uses:
 20% project score
 20% achievement score
 20% experience score
+
 2. Semantic Similarity
 
 The project uses the Sentence Transformers model:
@@ -148,16 +149,12 @@ candidate information and job description.
 
 The project also explores LLM-assisted candidate evaluation using:
 
-Mistral 7B
-
-through:
-
-Ollama
+--Mistral 7B through Ollama
 
 The LLM receives a job description and resume summary and produces:
 
-Match score
-Short reasoning for the score
+--Match score
+--Short reasoning for the score
 
 The notebook requests a score on a 0–100 scale together with a textual reason.
 
@@ -165,38 +162,44 @@ The notebook requests a score on a 0–100 scale together with a textual reason.
 
 The feature-based matching stage produces candidate-level values such as:
 
-Match Score
-Experience Years
-Skills
-Project Score
-Achievement Score
+--Match Score
+--Experience Years
+--Skills
+--Project Score
+--Achievement Score
 
 The notebook demonstrates sorting candidates according to their calculated
 matching scores.
 
 🛠️ Technologies
-Programming
-Python
-Google Colab
-Natural Language Processing
-spaCy
-Regular Expressions
-Sentence Transformers
-Machine Learning
-Scikit-learn
-TF-IDF
-Cosine Similarity
-LLM
-Mistral 7B
-Ollama
-Document Processing
-PyMuPDF
-pdfplumber
-python-docx
-Tesseract OCR
-Pillow
-Data & Visualization
-Pandas
-NumPy
-Matplotlib
-Seaborn
+
+Programming:
+--Python
+--Google Colab
+
+Natural Language Processing:
+--spaCy
+--Regular Expressions
+--Sentence Transformers
+
+Machine Learning:
+--Scikit-learn
+--TF-IDF
+--Cosine Similarity
+
+LLM:
+--Mistral 7B
+--Ollama
+
+Document Processing:
+--PyMuPDF
+--pdfplumber
+--python-docx
+--Tesseract OCR
+--Pillow
+
+Data & Visualization:
+--Pandas
+--NumPy
+--Matplotlib
+--Seaborn
