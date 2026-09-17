@@ -83,7 +83,7 @@ Resume Documents
 
 ---
 
-![System Workflow](images/image.png)
+![System Workflow](images/system_workflow.png)
 
 ## 📄 Resume Processing
 
@@ -145,6 +145,7 @@ The current implementation uses the following weighted scoring scheme:
 
 The resulting score is used to support candidate comparison and ranking.
 
+![System Workflow](images/Matched_Skill.png)
 ---
 
 ### 2. TF-IDF-Based Matching
@@ -187,7 +188,7 @@ The LLM receives a job description and resume summary and produces:
 
 This component is intended as an additional evaluation approach rather than
 a replacement for the structured matching methods.
-
+![System Workflow](images/LLM-Evaluation_&_Reasoning.png)
 ---
 
 ## 📊 Candidate Ranking
@@ -202,6 +203,7 @@ The feature-based matching stage produces candidate-level information such as:
 
 Candidates can then be sorted according to their calculated matching scores.
 
+![System Workflow](images/candidate_ranking.png)
 ---
 
 ## 🛠️ Technologies
@@ -254,6 +256,14 @@ AI-Resume-Screening/
 ├── README.md
 ├── requirements.txt
 │
+│
+└── 📁 images/
+│       ├── system-workflow.png
+│       ├── resume-extraction.png
+│       ├── candidate-ranking.png
+│       └── llm-evaluation.png
+│       └── README.md
+│    
 └── data/
     └── README.md
     └── synthetic_resumes.csv
